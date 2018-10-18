@@ -4,7 +4,7 @@ context <- RxHadoopMR(sshUsername = "sshuser",
 
 rxSetComputeContext(context)
 
-# List the contents of the /user/instructor folder in HDFS
+# List the contents of the /user/sshuser folder in HDFS
 rxHadoopCommand("fs -ls /user/sshuser")
 
 # Connect directly to HFDS on the Hadoop VM
