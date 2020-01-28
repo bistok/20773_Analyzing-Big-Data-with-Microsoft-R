@@ -107,7 +107,7 @@ PemaFlightDelays <- setPemaClass(
 pemaFlightDelaysObj <- PemaFlightDelays()
 
 # Connect to R Server and set up the environment
-remoteLogin(deployr_endpoint = "http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
+remoteLogin(deployr_endpoint = "http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
 
 # Copy the PEMA object from the R client
 pause()
@@ -120,7 +120,7 @@ library(dplyr)
 library(RevoPemaR)
 
 # Create some test data
-flightDelayDataFile <- ("\\\\LON-RSVR\\Data\\FlightDelayData.xdf")
+flightDelayDataFile <- ("E:\\Data\\FlightDelayData.xdf")
 flightDelayData <- RxXdfData(flightDelayDataFile)
 testData <- rxDataStep(flightDelayData, numRows = 50000)
 
@@ -137,7 +137,7 @@ print(pemaFlightDelaysObj$dest)
 print(pemaFlightDelaysObj$airline)
 
 # Create a subset of the XDF data
-flightDelayDataSubsetFile <- ("\\\\LON-RSVR\\Data\\FlightDelayDataSubset.xdf")
+flightDelayDataSubsetFile <- ("E:\\Data\\FlightDelayDataSubset.xdf")
 testData2 <- rxDataStep(flightDelayData, flightDelayDataSubsetFile, 
                        overwrite = TRUE, numRows = 50000, rowsPerRead = 5000)
 

@@ -1,14 +1,14 @@
 # EX 1
 
 # Connect to R Server
-remoteLogin(deployr_endpoint = "http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
+remoteLogin(deployr_endpoint = "http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
 
 # Split the data into training and test datasets
 rxOptions(reportProgress = 1)
-flightDelayDataFile <- "\\\\LON-RSVR\\Data\\FlightDelayData.xdf"
+flightDelayDataFile <- "E:\\Data\\FlightDelayData.xdf"
 flightDelayData <- RxXdfData(flightDelayDataFile)
 
-partitionedFlightDelayDataFile <- "\\\\LON-RSVR\\Data\\PartitionedFlightDelayData.xdf"
+partitionedFlightDelayDataFile <- "E:\\Data\\PartitionedFlightDelayData.xdf"
 
 flightData <- rxDataStep(inData = flightDelayData, 
                          outFile = partitionedFlightDelayDataFile, overwrite = TRUE,
@@ -19,7 +19,7 @@ flightData <- rxDataStep(inData = flightDelayData,
                          varsToKeep = c("Delay", "Origin", "Month", "DayOfWeek", "DepTime", "ArrTime",
                                         "Dest", "Distance", "UniqueCarrier", "OriginState", "DestState"))
 
-partitionFilesBaseName <- "\\\\LON-RSVR\\Data\\Partition"
+partitionFilesBaseName <- "E:\\Data\\Partition"
 flightDataSets <- rxSplit(flightData, splitByFactor = "Dataset", 
                           outFilesBase = partitionFilesBaseName, overwrite = TRUE)
 

@@ -67,7 +67,7 @@ PemaMean <- setPemaClass(
 meanPemaObj <- PemaMean()
 
 # Connect to R Server
-remoteLogin(deployr_endpoint = "http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
+remoteLogin(deployr_endpoint = "http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
 library(RevoPemaR)
 
 # Copy the PemaMean object to the R server environment for testing

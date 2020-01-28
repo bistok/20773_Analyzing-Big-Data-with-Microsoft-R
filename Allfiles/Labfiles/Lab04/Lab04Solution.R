@@ -1,10 +1,10 @@
 #EX 1
 # Connect to R Server
-remoteLogin(deployr_endpoint = "http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
+remoteLogin(deployr_endpoint = "http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
 
 # Examine the factor levels in each dataset
-airportData = RxXdfData("\\\\LON-RSVR\\Data\\airportData.xdf")
-flightDelayData = RxXdfData("\\\\LON-RSVR\\Data\\flightDelayData.xdf")
+airportData = RxXdfData("E:\\Data\\airportData.xdf")
+flightDelayData = RxXdfData("E:\\Data\\flightDelayData.xdf")
 
 iataFactor <- rxGetVarInfo(airportData, varsToKeep = c("iata"))
 print(iataFactor)
@@ -22,12 +22,12 @@ refactorLevels <- unique(c(iataFactor$iata[["levels"]],
 
 # Refactor the datasets
 rxOptions(reportProgress = 2)
-refactoredAirportDataFile <- "\\\\LON-RSVR\\Data\\RefactoredAirportData.xdf"
+refactoredAirportDataFile <- "E:\\Data\\RefactoredAirportData.xdf"
 refactoredAirportData <- rxFactors(inData = airportData, outFile = refactoredAirportDataFile, overwrite = TRUE,
                                    factorInfo = list(iata = list(newLevels = refactorLevels))
                                   )
 
-refactoredFlightDelayDataFile <- "\\\\LON-RSVR\\Data\\RefactoredFlightDelayData.xdf"
+refactoredFlightDelayDataFile <- "E:\\Data\\RefactoredFlightDelayData.xdf"
 refactoredFlightDelayData <- rxFactors(inData = flightDelayData, outFile = refactoredFlightDelayDataFile, overwrite = TRUE,
                                        factorInfo = list(Origin = list(newLevels = refactorLevels),
                                                          Dest = list(newLevels = refactorLevels))
@@ -47,13 +47,13 @@ print(destFactor)
 names(refactoredAirportData)[[1]] <- "Origin" 
 
 # reblock the airport data file
-reblockedAirportDataFile <- "\\\\LON-RSVR\\Data\\reblockedAirportData.xdf"
+reblockedAirportDataFile <- "E:\\Data\\reblockedAirportData.xdf"
 reblockedAirportData <- rxDataStep(refactoredAirportData, 
                                    reblockedAirportDataFile, overwrite = TRUE
                                   )
 
 # Perform the merge to add the timezone of the Origin airport
-mergedFlightDelayDataFile <- "\\\\LON-RSVR\\Data\\MergedFlightDelayData.xdf"
+mergedFlightDelayDataFile <- "E:\\Data\\MergedFlightDelayData.xdf"
 mergedFlightDelayData <- rxMerge(inData1 = refactoredFlightDelayData, inData2 = reblockedAirportData,
                                  outFile = mergedFlightDelayDataFile, overwrite = TRUE,
                                  type = "inner", matchVars = c("Origin"), autoSort = TRUE,
@@ -74,7 +74,7 @@ tail(mergedFlightDelayData)
 # Generate a sample of the data to transform
 rxOptions(reportProgress = 1)
 
-flightDelayDataSubsetFile <- "\\\\LON-RSVR\\Data\\flightDelayDataSubset.xdf"
+flightDelayDataSubsetFile <- "E:\\Data\\flightDelayDataSubset.xdf"
 flightDelayDataSubset <- rxDataStep(inData = mergedFlightDelayData,
                                     outFile = flightDelayDataSubsetFile, overwrite = TRUE,
                                     rowSelection = rbinom(.rxNumRows, size = 1, prob = 0.005)
@@ -145,7 +145,7 @@ standardizeTimes <- function (dataList) {
 }
 
 # Transform the sample data
-flightDelayDataTimeZonesFile <- "\\\\LON-RSVR\\Data\\flightDelayDataTimezones.xdf"
+flightDelayDataTimeZonesFile <- "E:\\Data\\flightDelayDataTimezones.xdf"
 flightDelayDataTimeZones <- rxDataStep(inData = flightDelayDataSubset,
                                        outFile = flightDelayDataTimeZonesFile, overwrite = TRUE,
                                        transformFunc = standardizeTimes,
@@ -235,7 +235,7 @@ calculateCumulativeAverageDelays <- function (dataList) {
 }
 
 # Perform the transformation
-flightDelayDataWithAveragesFile <- "\\\\LON-RSVR\\Data\\flightDelayDataWithAverages.xdf"
+flightDelayDataWithAveragesFile <- "E:\\Data\\flightDelayDataWithAverages.xdf"
 flightDelayDataWithAverages <- rxDataStep(inData = sortedFlightDelayData,
                                           outFile = flightDelayDataWithAveragesFile, overwrite = TRUE,
                                           transformFunc = calculateCumulativeAverageDelays,

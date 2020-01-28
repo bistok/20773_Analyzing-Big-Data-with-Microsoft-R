@@ -20,7 +20,7 @@ flightDelayDataTable <- RxSqlServerData(connectionString = connStr,
 # Add a boolean factor variable, DelayedByWeather, as the data is uploaded
 # Also add a column to indicate whether a row should be used for training the predictive model or testing it
 rxOptions(reportProgress = 2)
-flightDelayDataFile <- "\\\\LON-RSVR\\Data\\FlightDelayDataSample.xdf"
+flightDelayDataFile <- "E:\\Data\\FlightDelayDataSample.xdf"
 flightDelayData <- rxDataStep(inData = flightDelayDataFile,
                               outFile = flightDelayDataTable, overwrite = TRUE,
                               transforms = list(DelayedByWeather = factor(ifelse(is.na(WeatherDelay), 0, WeatherDelay) > 0, levels = c(FALSE, TRUE)),

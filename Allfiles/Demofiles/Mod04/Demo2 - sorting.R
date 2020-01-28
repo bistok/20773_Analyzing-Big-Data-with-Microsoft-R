@@ -1,8 +1,8 @@
 # Connect to R Server
-remoteLogin(deployr_endpoint = "http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
+remoteLogin(deployr_endpoint = "http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
 
 # Examine the data
-flightDelayDataSubset = RxXdfData("\\\\LON-RSVR\\Data\\FlightDelayData.xdf")
+flightDelayDataSubset = RxXdfData("E:\\Data\\FlightDelayData.xdf")
 head(flightDelayDataSubset)                            
 
 # Sort it by Origin (this will take approx 90 seconds)

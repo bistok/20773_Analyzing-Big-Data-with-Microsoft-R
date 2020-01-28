@@ -59,7 +59,7 @@ rm(flightDataSample, flightDataSampleXDF, csvDelaySummary, xdfDelaySummary,
 # Preparation: Log into the LON-RSVR VM and create the Data share over the C:\Temp folder
 # Copy the CSV files from E:\Setup\Data to \\LON-RSVR\\Data
 
-remoteLogin("http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE)
+remoteLogin("http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE)
 
 pause()
 
@@ -71,7 +71,7 @@ ls()
 
 # Transform the data - create a combined Delay column, filter all cancelled flights, and discard FlightNum, TailNum, and CancellationCode
 # Test import and transform over a small sample first
-flightDataSampleXDF <- rxImport(inData = "\\\\LON-RSVR\\Data\\2000.csv", outFile = "\\\\LON-RSVR\\Data\\Sample.xdf", overwrite = TRUE, append = "none", colClasses = flightDataColumns,
+flightDataSampleXDF <- rxImport(inData = "E:\\Data\\2000.csv", outFile = "E:\\Data\\Sample.xdf", overwrite = TRUE, append = "none", colClasses = flightDataColumns,
                                 transforms = list(
                                   Delay = ArrDelay + DepDelay + ifelse(is.na(CarrierDelay), 0, CarrierDelay) + ifelse(is.na(WeatherDelay), 0, WeatherDelay) + ifelse(is.na(NASDelay), 0, NASDelay) + ifelse(is.na(SecurityDelay), 0, SecurityDelay) + ifelse(is.na(LateAircraftDelay), 0, LateAircraftDelay),
                                   MonthName = factor(month.name[as.numeric(Month)], levels=month.name)),
@@ -85,8 +85,8 @@ head(flightDataSampleXDF, 100)
 # Combine separate CSV files containing data for each year into one big XDF file, performing the same transformations (which have now been tested)
 rxOptions(reportProgress = 1)
 
-delayXdf <- "\\\\LON-RSVR\\Data\\FlightDelayData.xdf"
-flightDataCsvFolder <- "\\\\LON-RSVR\\Data"
+delayXdf <- "E:\\Data\\FlightDelayData.xdf"
+flightDataCsvFolder <- "E:\\Data"
 flightDataXDF <- rxImport(inData = flightDataCsvFolder, outFile = delayXdf, overwrite = TRUE, append = ifelse(file.exists(delayXdf), "rows", "none"), colClasses = flightDataColumns,
                           transforms = list(
                             Delay = ArrDelay + DepDelay + ifelse(is.na(CarrierDelay), 0, CarrierDelay) + ifelse(is.na(WeatherDelay), 0, WeatherDelay) + ifelse(is.na(NASDelay), 0, NASDelay) + ifelse(is.na(SecurityDelay), 0, SecurityDelay) + ifelse(is.na(LateAircraftDelay), 0, LateAircraftDelay),
@@ -112,7 +112,7 @@ airportInfo <- rxImport(inData = airportData, stringsAsFactors = TRUE)
 head(airportInfo)
 
 # Connect remotely
-remoteLogin("http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE)
+remoteLogin("http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE)
 
 pause()
 
@@ -122,8 +122,8 @@ putLocalObject(c("airportInfo"))
 resume()
 
 # Add the OriginState and DestState columns. These columns hold the US state for the Origin and Dest airports, retrieved from the airportData data frame
-enhancedDelayDataXdf <- "\\\\LON-RSVR\\Data\\EnhancedFlightDelayData.xdf"
-flightDelayDataXdf <- "\\\\LON-RSVR\\Data\\FlightDelayData.xdf"
+enhancedDelayDataXdf <- "E:\\Data\\EnhancedFlightDelayData.xdf"
+flightDelayDataXdf <- "E:\\Data\\FlightDelayData.xdf"
 
 enhancedXdf <- rxImport(inData = flightDelayDataXdf, outFile = enhancedDelayDataXdf,
                         overwrite = TRUE, append = "none", rowsPerRead = 500000,
@@ -175,7 +175,7 @@ library(dplyr)
 library(dplyrXdf)
 
 # Read in a subset of the data from the XDF file containing the data to be summarized (discard all the other columns)
-enhancedDelayDataXdf <- "\\\\LON-RSVR\\Data\\EnhancedFlightDelayData.xdf"
+enhancedDelayDataXdf <- "E:\\Data\\EnhancedFlightDelayData.xdf"
 essentialData <-RxXdfData(enhancedDelayDataXdf, varsToKeep = c("Delay", "Origin", "Dest", "OriginState", "DestState"))
 
 # Summarize the data using dplyrXdf
@@ -184,7 +184,7 @@ originAirportStats <- filter(essentialData, !is.na(Delay)) %>%
   group_by(Origin) %>%
   summarise(mean_delay = mean(Delay), .method = 1) %>% # Use methods 1 or 2 only
   arrange(desc(mean_delay)) %>%
-  persist("\\\\LON-RSVR\\Data\\temp.xdf")  # Return a reference to a persistent file. By default, temp files will be deleted
+  persist("E:\\Data\\temp.xdf")  # Return a reference to a persistent file. By default, temp files will be deleted
 head(originAirportStats, 100)
 
 destAirportStats <- filter(essentialData, !is.na(Delay)) %>%
@@ -192,7 +192,7 @@ destAirportStats <- filter(essentialData, !is.na(Delay)) %>%
   group_by(Dest) %>%
   summarise(mean_delay = mean(Delay), .method = 1) %>%
   arrange(desc(mean_delay)) %>%
-  persist("\\\\LON-RSVR\\Data\\temp.xdf")
+  persist("E:\\Data\\temp.xdf")
 head(destAirportStats, 100)
 
 originStateStats <- filter(essentialData, !is.na(Delay)) %>%
@@ -200,7 +200,7 @@ originStateStats <- filter(essentialData, !is.na(Delay)) %>%
   group_by(OriginState) %>%
   summarise(mean_delay = mean(Delay), .method = 1) %>%
   arrange(desc(mean_delay)) %>%
-  persist("\\\\LON-RSVR\\Data\\temp.xdf")
+  persist("E:\\Data\\temp.xdf")
 head(originStateStats, 100)
 
 destStateStats <- filter(essentialData, !is.na(Delay)) %>%
@@ -208,6 +208,6 @@ destStateStats <- filter(essentialData, !is.na(Delay)) %>%
   group_by(DestState) %>%
   summarise(mean_delay = mean(Delay), .method = 1) %>%
   arrange(desc(mean_delay)) %>%
-  persist("\\\\LON-RSVR\\Data\\temp.xdf")
+  persist("E:\\Data\\temp.xdf")
 head(destStateStats, 100)
 

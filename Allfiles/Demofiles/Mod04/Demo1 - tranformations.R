@@ -1,8 +1,8 @@
 # Connect to R Server
-remoteLogin(deployr_endpoint = "http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
+remoteLogin(deployr_endpoint = "http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
 
 # Examine the dataset
-FlightDelayData <- "\\\\LON-RSVR\\Data\\FlightDelayData.xdf"
+FlightDelayData <- "E:\\Data\\FlightDelayData.xdf"
 rxGetInfo(FlightDelayData, getVarInfo = TRUE, getBlockSize = TRUE)
 head(RxXdfData(FlightDelayData))
 
@@ -37,7 +37,7 @@ addRunningTotal <- function (dataList) {
 }
 
 # Run the transformation
-EnhancedFlightDelayData <- "\\\\LON-RSVR\\Data\\EnhancedFlightDelayData.xdf"
+EnhancedFlightDelayData <- "E:\\Data\\EnhancedFlightDelayData.xdf"
 
 rxOptions("reportProgress" = 2)
 rxDataStep(inData = FlightDelayData, outFile = EnhancedFlightDelayData, 

@@ -1,13 +1,13 @@
 # EX 1
 
 # Connect to R Server
-remoteLogin(deployr_endpoint = "http://LON-RSVR.ADATUM.COM:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
+remoteLogin(deployr_endpoint = "http://localhost:12800", session = TRUE, diff = TRUE, commandline = TRUE, username = "admin", password = "Pa55w.rd")
 
 # Examine the relationship between the Delay and DepTime variables in the flight delay data
 # Create a test sample containing 10% of the flight delay data
 rxOptions(reportProgress = 1)
-flightDelayData = RxXdfData("\\\\LON-RSVR\\Data\\flightDelayData.xdf")
-sampleDataFile = "\\\\LON-RSVR\\Data\\flightDelayDatasample.xdf"
+flightDelayData = RxXdfData("E:\\Data\\flightDelayData.xdf")
+sampleDataFile = "E:\\Data\\flightDelayDatasample.xdf"
 
 flightDelayDataSample <- rxDataStep(inData = flightDelayData, 
                                     outFile = sampleDataFile, overwrite = TRUE,
