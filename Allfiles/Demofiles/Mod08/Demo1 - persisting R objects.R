@@ -1,5 +1,5 @@
 # Create a SQL Server compute context
-sqlConnString <- "Driver=SQL Server;Server=LON-SQLR;Database=AirlineData;Trusted_Connection=Yes" 
+sqlConnString <- "Driver=SQL Server;Server=(local);Database=AirlineData;Trusted_Connection=Yes" 
 sqlWait <- TRUE
 sqlConsoleOutput <- TRUE
 

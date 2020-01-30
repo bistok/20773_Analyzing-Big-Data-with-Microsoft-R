@@ -12,7 +12,7 @@
 rxSetComputeContext(RxLocalSeq())
 
 # Create a SQL Server data source for uploading the flight delay data
-connStr <- "Driver=SQL Server;Server=LON-SQLR;Database=FlightDelays;Trusted_Connection=Yes"
+connStr <- "Driver=SQL Server;Server=(local);Database=FlightDelays;Trusted_Connection=Yes"
 flightDelayDataTable <- RxSqlServerData(connectionString = connStr,
                                         table = "flightdelaydata")
 

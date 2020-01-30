@@ -1,5 +1,5 @@
 setwd("E:\\Demofiles\\Mod08")
-conString <- "Server=LON-SQLR;Database=AirlineData;Trusted_Connection=TRUE"
+conString <- "Server=(local);Database=AirlineData;Trusted_Connection=TRUE"
 airportData <- RxSqlServerData(connectionString = conString, table = "Airports")
 colClasses <- c(
 	"iata" = "character",

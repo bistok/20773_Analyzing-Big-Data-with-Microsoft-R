@@ -1,6 +1,6 @@
 # Connect to SQL Server
 
-sqlConnString <- "Driver=SQL Server;Server=LON-SQLR;Database=AirlineData;Trusted_Connection=True"
+sqlConnString <- "Driver=SQL Server;Server=(local);Database=AirlineData;Trusted_Connection=True"
 
 connection <- RxSqlServerData(connectionString = sqlConnString,
                               table = "dbo.Airports", rowsPerRead = 1000)

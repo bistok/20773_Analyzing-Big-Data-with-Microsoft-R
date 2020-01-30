@@ -101,7 +101,7 @@ exit
 # EX3 - Start locally
 
 # Import airport data from the Airports table in the AirlineData database, and save it as an XDF file
-conString <- "Server=LON-SQLR;Database=AirlineData;Trusted_Connection=TRUE"
+conString <- "Server=(local);Database=AirlineData;Trusted_Connection=TRUE"
 airportData <- RxSqlServerData(connectionString = conString, table = "Airports")
 
 # Examine the first few rows of data
